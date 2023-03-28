@@ -1,6 +1,6 @@
 {
-    "name": "jascha030/template",
-    "description": "Template repo for creating composer packages",
+    "name": "jascha030/process-chain",
+    "description": "Chain symfony/process commands together.",
     "type": "library",
     "license": "MIT",
     "authors": [
