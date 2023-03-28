@@ -22,6 +22,8 @@ use function PHPUnit\Framework\assertIsString;
 
 /**
  * @covers \Jascha030\Process\Chain\ProcessChain
+ *
+ * @internal
  */
 final class ProcessChainTest extends TestCase
 {
@@ -57,10 +59,6 @@ final class ProcessChainTest extends TestCase
 
     /**
      * @depends testMustRun
-     *
-     * @param ProcessChain $chain
-     *
-     * @return void
      */
     public function testGetExitCodes(ProcessChain $chain): void
     {
@@ -97,19 +95,19 @@ final class ProcessChainTest extends TestCase
         return $chain;
     }
 
-    public function test__clone(): void
+    public function testClone(): void
     {
         assertInstanceOf(ProcessChain::class, clone $this->createChain());
     }
 
-    public function test__sleep(): void
+    public function testSleep(): void
     {
         $this->expectException(BadMethodCallException::class);
 
         $this->createChain()->__sleep();
     }
 
-    public function test__wakeup(): void
+    public function testWakeup(): void
     {
         $this->expectException(BadMethodCallException::class);
 

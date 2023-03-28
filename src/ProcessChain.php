@@ -7,7 +7,6 @@ namespace Jascha030\Process\Chain;
 use Illuminate\Support\Collection;
 use PhpOption\Option;
 use RuntimeException;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -17,19 +16,24 @@ use function getcwd;
 
 class ProcessChain
 {
+    /**
+     * @var Collection<Process|string>
+     */
     private Collection $processes;
 
     private bool $hasRun = false;
 
+    /**
+     * @param null|array<mixed> $env
+     */
     private function __construct(
-        iterable                         $commands,
+        iterable $commands,
         private readonly OutputInterface $output = new ConsoleOutput(),
-        ?string                          $cwd = null,
-        ?array                           $env = null,
-        mixed                            $input = null,
-        int                              $timeout = 60
-    )
-    {
+        ?string $cwd = null,
+        ?array $env = null,
+        mixed $input = null,
+        int $timeout = 60
+    ) {
         $this->processes = collect($commands)
             ->keyBy(static fn (string $command): string => $command)
             ->map(static fn (string $command): Process => Process::fromShellCommandline($command, $cwd ?? getcwd(), $env, $input, $timeout));
@@ -50,15 +54,17 @@ class ProcessChain
         throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
 
+    /**
+     * @param null|array<mixed> $env
+     */
     public static function create(
-        array            $commands,
+        array $commands,
         ?OutputInterface $output = new ConsoleOutput(),
-        ?string          $cwd = null,
-        ?array           $env = null,
-        mixed            $input = null,
-        int              $timeout = 60
-    ): ProcessChain
-    {
+        ?string $cwd = null,
+        ?array $env = null,
+        mixed $input = null,
+        int $timeout = 60
+    ): ProcessChain {
         return new static($commands, $output, $cwd, $env, $input, $timeout);
     }
 
@@ -70,7 +76,7 @@ class ProcessChain
     }
 
     /**
-     * @return Collection<Process>
+     * @return Collection<Process|string>
      */
     public function getProcesses(): Collection
     {
@@ -97,13 +103,16 @@ class ProcessChain
     public function getExitCodes(): Collection
     {
         $this->hasRun()
-             ->getOrThrow(new RuntimeException('Cannot get exit codes before running the process chain.'));
+            ->getOrThrow(new RuntimeException('Cannot get exit codes before running the process chain.'));
 
         return $this->processes
             ->collect()
             ->map(fn (Process $process): int => $process->getExitCode());
     }
 
+    /**
+     * @return Traversable<Process|string>
+     */
     public function getIterator(): Traversable
     {
         foreach ($this->processes as $process) {
@@ -112,6 +121,9 @@ class ProcessChain
         }
     }
 
+    /**
+     * @return Option<bool>
+     */
     private function hasRun(): Option
     {
         return Option::fromValue($this->hasRun);
