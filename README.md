@@ -15,14 +15,6 @@ Chain `symfony/process` commands together.
 composer require jascha030/process-chain
 ```
 
-#### Distribution
-
-Alternative steps for distribution when not required as composer package.
-
-```shell
-composer require --no-dev jascha030/process-chain
-```
-
 ## Usage
 
 ```php
