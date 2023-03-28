@@ -9,27 +9,32 @@
             "email": "contact@jaschavanaalst.nl"
         }
     ],
-    "keywords": [],
     "homepage": "https://github.com/jascha030",
     "autoload": {
         "psr-4": {
-            "Jascha030\\Project\\": "src/"
+            "Jascha030\\Process\\Chain\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jascha030\\Project\\": "tests/Unit/"
+            "Jascha030\\Process\\Chain\\": "tests/Unit/"
         }
     },
     "repositories": [],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": "~8.0||~8.1||~8.2"
+        "php": "~8.1||~8.2",
+        "illuminate/collections": "^10.4",
+        "phpoption/phpoption": "^1.9",
+        "symfony/console": "^6.2",
+        "symfony/process": "^6.2"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "symfony/filesystem": "^6.2",
+        "symfony/var-dumper": "^6.2"
     },
     "config": {
         "platform": {
