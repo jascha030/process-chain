@@ -39,7 +39,7 @@ class ProcessChain
             ->map(static fn (string $command): Process => Process::fromShellCommandline($command, $cwd ?? getcwd(), $env, $input, $timeout));
     }
 
-    public function __clone()
+    public function __clone(): void
     {
         $this->resetProcessData();
     }
@@ -49,12 +49,13 @@ class ProcessChain
         throw new \BadMethodCallException('Cannot serialize ' . __CLASS__);
     }
 
-    public function __wakeup()
+    public function __wakeup(): void
     {
         throw new \BadMethodCallException('Cannot unserialize ' . __CLASS__);
     }
 
     /**
+     * @param string[]          $commands
      * @param null|array<mixed> $env
      */
     public static function create(
@@ -83,7 +84,10 @@ class ProcessChain
         return $this->processes;
     }
 
-    public function mustRun(callable $callback = null, array $env = []): ProcessChain
+    /**
+     * @param null|array<mixed> $env
+     */
+    public function mustRun(?callable $callback = null, array $env = []): ProcessChain
     {
         $this->processes->map(function (Process $process, string $command) use ($callback, $env) {
             $process->mustRun($callback, $env);
